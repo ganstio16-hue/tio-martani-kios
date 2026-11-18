@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7f4">
+  <meta name="description" content="Aplikasi internal untuk mengelola produk dan harga Tio Martani Kios.">
+  <title>Tio Martani Kios | Manajemen Toko</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{--bg:#f4f7f4;--surface:#fff;--surface-2:#f8faf8;--text:#17231d;--muted:#738078;--line:#e5ebe6;--green:#16784b;--green-dark:#105c39;--green-soft:#e8f4ed;--red:#bd3c32;--red-soft:#fff0ee;--amber:#946200;--amber-soft:#fff7df;--shadow:0 8px 28px rgba(20,45,30,.06);--radius:18px}
+    *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(22,120,75,.18);outline-offset:2px}
+    .login-wrap{min-height:100dvh;display:grid;place-items:center;padding:22px}.login-card{width:min(100%,410px);background:var(--surface);border:1px solid var(--line);border-radius:25px;padding:27px;box-shadow:var(--shadow)}.brand-mark{width:48px;height:48px;border-radius:16px;background:var(--green-soft);color:var(--green);display:grid;place-items:center;font-size:23px;margin-bottom:18px}.login-card h1{font-size:24px;letter-spacing:-.7px;margin:0 0 7px}.sub{color:var(--muted);line-height:1.55;margin:0 0 20px}.field{display:grid;gap:7px;margin-bottom:14px;min-width:0}.field label{font-size:12px;font-weight:700;color:#526158}.field input,.field select,.field textarea,.toolbar input,.toolbar select,.quick-search input{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 13px;color:var(--text);outline:none;min-width:0}.field input:focus,.field select:focus,.field textarea:focus,.toolbar input:focus,.toolbar select:focus,.quick-search input:focus{border-color:#7db99a;box-shadow:0 0 0 3px rgba(22,120,75,.09)}.field textarea{resize:vertical;min-height:82px}.field .hint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:-2px}
+    .btn{border:0;border-radius:12px;padding:11px 15px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .15s,transform .15s}.btn:active{transform:translateY(1px)}.btn-primary{background:var(--green);color:white}.btn-primary:hover{background:var(--green-dark)}.btn-secondary{background:var(--green-soft);color:var(--green)}.btn-ghost{background:#f1f5f2;color:#425148}.btn-danger{background:var(--red-soft);color:var(--red)}.btn-block{width:100%}.btn:disabled{opacity:.55;cursor:wait}.btn-small{padding:8px 11px;font-size:12px}
+    .app{min-height:100dvh;padding-bottom:92px}.topbar{height:64px;background:rgba(255,255,255,.93);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(16px,calc((100vw - 1160px)/2));position:sticky;top:0;z-index:10;backdrop-filter:blur(12px)}.top-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;letter-spacing:-.2px}.mini-mark{width:34px;height:34px;border-radius:11px;background:var(--green-soft);color:var(--green);display:grid;place-items:center}.top-actions{display:flex;align-items:center;gap:9px}.owner-pill{font-size:10px;color:var(--green);background:var(--green-soft);border-radius:30px;padding:7px 10px;font-weight:800;letter-spacing:.4px}
+    main{width:min(100% - 28px,1160px);margin:23px auto}.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}.page-head h2{font-size:23px;margin:0 0 4px;letter-spacing:-.65px}.page-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}.eyebrow{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--green);margin-bottom:6px}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:17px}.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:15px;min-width:0}.stat .label{font-size:11px;color:var(--muted);font-weight:700}.stat .value{font-size:24px;font-weight:800;margin-top:7px;letter-spacing:-.8px;overflow-wrap:anywhere}.stat .hint{font-size:11px;color:var(--muted);margin-top:3px}.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 3px 14px rgba(20,45,30,.025);overflow:hidden}.panel+.panel{margin-top:14px}.panel-head{padding:16px 17px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-head h3{font-size:14px;margin:0}.panel-head p{font-size:11px;color:var(--muted);margin:4px 0 0}.panel-body{padding:16px}.quick-search{display:flex;gap:9px;align-items:center;margin-top:13px}.quick-search input{flex:1;background:#fff}.quick-search .search-icon{font-size:17px;color:var(--muted);margin-right:-38px;z-index:1;pointer-events:none;padding-left:12px}.quick-search input{padding-left:38px}.quick-results{display:grid;gap:8px;margin-top:12px}.quick-result{display:flex;align-items:center;gap:11px;padding:10px;border:1px solid var(--line);border-radius:13px;background:#fff}.quick-result .product-photo{width:43px;height:43px;flex-basis:43px}.quick-result .product-info{flex:1;min-width:0}.quick-result .product-price{font-size:14px}
+    .toolbar{display:flex;gap:9px;margin-bottom:14px}.toolbar input{flex:1}.toolbar select{width:170px}.toolbar .sort-select{width:180px}.product-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.product-row{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--line);border-radius:14px;min-width:0;background:#fff}.product-photo{width:54px;height:54px;flex:0 0 54px;border-radius:12px;background:#f1f5f2;display:grid;place-items:center;overflow:hidden;color:#96a39a;font-size:20px}.product-photo img{width:100%;height:100%;object-fit:cover}.product-info{flex:1;min-width:0}.product-info strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.product-info small{display:block;color:var(--muted);font-size:11px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.product-price{font-weight:800;font-size:13px;white-space:nowrap;text-align:right}.product-price small{display:block;color:var(--muted);font-size:10px;font-weight:500;margin-top:3px}.row-actions{display:flex;gap:5px;margin-left:2px}.icon-btn{border:1px solid var(--line);background:#fff;border-radius:9px;width:33px;height:33px;display:grid;place-items:center;color:#526158;flex:0 0 auto}.icon-btn:hover{background:#f5f8f6}.icon-btn.danger{color:var(--red)}.empty{padding:30px 14px;text-align:center;color:var(--muted);grid-column:1/-1}.empty b{display:block;color:var(--text);margin-bottom:5px}.empty .btn{margin-top:12px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.span-2{grid-column:1/-1}.form-actions{display:flex;gap:9px;justify-content:flex-end;padding-top:6px}.file-hint{font-size:11px;color:var(--muted);margin-top:-5px;line-height:1.4}.photo-preview{display:flex;align-items:center;gap:12px;padding:10px;border:1px dashed #cbd8ce;border-radius:13px;margin-bottom:14px;background:var(--surface-2)}.photo-preview img{width:58px;height:58px;object-fit:cover;border-radius:10px}.photo-preview span{font-size:11px;color:var(--muted);line-height:1.4}.settings-list{display:grid;gap:10px}.setting-item{padding:14px;border:1px solid var(--line);border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.setting-item strong{font-size:13px}.setting-item small{display:block;color:var(--muted);margin-top:4px;font-size:11px;line-height:1.45}.version-note{font-size:11px;color:var(--muted);margin:13px 3px 0;line-height:1.5}
+    .bottom-nav{position:fixed;z-index:20;bottom:0;left:0;right:0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);backdrop-filter:blur(12px)}.nav-btn{border:0;background:transparent;color:#8a968e;display:grid;justify-items:center;gap:4px;padding:5px 2px;font-size:10px;font-weight:700}.nav-btn .nav-icon{font-size:19px;line-height:1.1}.nav-btn.active{color:var(--green)}.nav-btn.add .nav-icon{background:var(--green);color:#fff;width:34px;height:28px;border-radius:10px;display:grid;place-items:center;font-size:19px;margin-top:-4px}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(14,28,19,.45);z-index:50;display:grid;place-items:center;padding:16px}.modal{background:#fff;width:min(100%,490px);max-height:86dvh;overflow:auto;border-radius:20px;padding:19px;box-shadow:0 20px 70px rgba(0,0,0,.2)}.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.modal-head h3{margin:0;font-size:16px}.history-item{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px}.history-item:last-child{border-bottom:0}.history-item small{color:var(--muted);display:block;margin-top:4px}.history-change{font-weight:800;color:var(--green);white-space:nowrap}.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#1d2b22;color:#fff;padding:11px 15px;border-radius:12px;z-index:80;font-size:12px;box-shadow:var(--shadow);max-width:calc(100% - 32px);text-align:center}.toast.error{background:#8e2e27}.loading{opacity:.55;pointer-events:none}.muted{color:var(--muted)}.section-note{font-size:11px;color:var(--muted);line-height:1.5;margin:12px 2px 0}
+    @media(min-width:760px){.app{padding-bottom:24px}.bottom-nav{position:static;width:min(100% - 28px,1160px);margin:0 auto 24px;border:1px solid var(--line);border-radius:16px;padding:8px;display:flex;justify-content:flex-start;gap:8px}.nav-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:12px}.nav-btn .nav-icon{font-size:16px}.nav-btn.add .nav-icon{margin:0;width:24px;height:24px}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.product-list{grid-template-columns:repeat(2,minmax(0,1fr))}main{margin-top:28px}}
+    @media(max-width:600px){main{width:calc(100% - 22px);margin:15px auto}.topbar{padding:0 13px;height:58px}.page-head{align-items:center}.page-head h2{font-size:20px}.page-head p{font-size:12px}.stats{gap:8px}.stat{padding:11px}.stat .value{font-size:19px}.stat .label{font-size:10px}.stat .hint{font-size:10px}.toolbar{flex-direction:column}.toolbar select,.toolbar .sort-select{width:100%}.form-grid{grid-template-columns:1fr}.span-2{grid-column:auto}.product-list{grid-template-columns:1fr}.product-row{gap:9px;padding:9px}.product-photo{width:46px;height:46px;flex-basis:46px}.row-actions{gap:3px}.icon-btn{width:30px;height:30px}.product-price{font-size:12px}.panel-body{padding:12px}.panel-head{padding:14px}.quick-search{margin-top:12px}.setting-item{align-items:flex-start}.setting-item .btn{white-space:nowrap}.form-actions{position:sticky;bottom:78px;background:rgba(255,255,255,.96);padding:10px 0 4px;z-index:3}.login-card{padding:23px}}
+    @media(max-width:360px){.owner-pill{display:none}.stats{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:1/-1}.page-head .btn{padding:10px;font-size:12px}}
+  
+    .product-main{display:flex;align-items:center;gap:10px;flex:1;min-width:0;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}.product-main .product-info{min-width:0}.product-main:hover .product-info strong{text-decoration:underline;text-decoration-color:#9bc9ac;text-underline-offset:3px}.product-meta{display:flex;align-items:center;gap:6px;min-width:0;margin-top:4px}.product-meta>span:first-child{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.note-indicator{display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;padding:3px 6px;border-radius:6px;background:var(--amber-soft);color:var(--amber);font-size:9px;font-weight:800;line-height:1.2}.quick-result{width:100%;font:inherit;color:inherit;text-align:left;cursor:pointer}.quick-result:hover,.product-row:focus-within{border-color:#b8d5c2}.detail-layout{display:grid;grid-template-columns:100px 1fr;gap:14px;align-items:center;margin-bottom:16px}.detail-photo{width:100px;height:100px;border-radius:16px;background:var(--surface-2);display:grid;place-items:center;overflow:hidden;color:#96a39a;font-size:28px}.detail-photo img{width:100%;height:100%;object-fit:cover}.detail-name{font-size:17px;font-weight:800;line-height:1.3;margin-bottom:6px;overflow-wrap:anywhere}.detail-category{font-size:12px;color:var(--muted)}.detail-prices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}.detail-price{padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2)}.detail-price span,.detail-label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:5px}.detail-price strong{font-size:16px;overflow-wrap:anywhere}.detail-notes{padding:13px;border:1px solid var(--line);border-radius:13px;background:#fff}.detail-notes p{margin:0;font-size:13px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}.detail-notes .no-note{color:var(--muted);font-style:italic}.detail-note-head{display:flex;align-items:center;gap:7px;margin-bottom:7px}.detail-note-head .detail-label{margin:0}
+  </style>
+</head>
+<body>
+  <section id="loginScreen" class="login-wrap">
+    <form id="loginForm" class="login-card">
+      <div class="brand-mark">▦</div>
+      <div class="eyebrow">Tio Martani Kios</div>
+      <h1>Manajemen Toko</h1>
+      <p class="sub">Masuk untuk melihat dan mengelola daftar produk serta harga toko.</p>
+      <div class="field"><label for="email">Email pemilik</label><input id="email" type="email" autocomplete="username" placeholder="nama@email.com" required></div>
+      <div class="field"><label for="password">Kata sandi</label><input id="password" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi" required></div>
+      <button class="btn btn-primary btn-block" type="submit" id="loginButton">Masuk ke aplikasi</button>
+      <p id="loginError" class="sub" style="color:var(--red);font-size:12px;margin:12px 0 0"></p>
+    </form>
+  </section>
+
+  <div id="appScreen" class="app hidden">
+    <header class="topbar">
+      <div class="top-brand"><span class="mini-mark">▦</span><span>Tio Martani Kios</span></div>
+      <div class="top-actions"><span class="owner-pill">OWNER</span></div>
+    </header>
+    <main>
+      <section id="view-dashboard" class="view">
+        <div class="page-head"><div><div class="eyebrow">Dashboard</div><h2>Ringkasan Toko</h2><p>Temukan harga barang dan pantau data produk.</p></div></div>
+        <div class="stats">
+          <div class="stat"><div class="label">Total produk</div><div class="value" id="statProducts">0</div><div class="hint">Produk tersimpan</div></div>
+          <div class="stat"><div class="label">Kategori</div><div class="value" id="statCategories">0</div><div class="hint">Jenis produk</div></div>
+          <div class="stat"><div class="label">Harga perlu dicek</div><div class="value" id="statNoPrice">0</div><div class="hint">Harga Rp0</div></div>
+        </div>
+        <section class="panel">
+          <div class="panel-body">
+            <div><div class="eyebrow">Cari cepat</div><h3 style="margin:0;font-size:16px">Berapa harga barangnya?</h3><p class="muted" style="font-size:12px;margin:5px 0 0">Ketik nama produk untuk melihat harga jual.</p></div>
+            <div class="quick-search"><span class="search-icon">⌕</span><input id="quickSearch" type="search" placeholder="Contoh: keripik, sabun, pulpen…" autocomplete="off"></div>
+            <div id="quickResults" class="quick-results"><div class="empty"><b>Mulai pencarian</b>Hasil produk akan muncul di sini.</div></div>
+          </div>
+        </section>
+        <section class="panel" style="margin-top:14px"><div class="panel-head"><div><h3>Produk terakhir diperbarui</h3><p>Empat produk terbaru</p></div><button class="btn btn-secondary btn-small" id="goProducts" type="button">Lihat semua</button></div><div class="panel-body"><div id="recentProducts" class="product-list"></div></div></section>
+      </section>
+
+      <section id="view-products" class="view hidden">
+        <div class="page-head"><div><div class="eyebrow">Katalog toko</div><h2>Daftar Produk</h2><p>Cari produk, periksa harga, atau ubah data.</p></div><button class="btn btn-primary" id="addFromProducts" type="button">＋ Tambah</button></div>
+        <section class="panel"><div class="panel-body">
+          <div class="toolbar"><input id="searchInput" type="search" placeholder="Cari nama, kategori, atau catatan…"><select id="categoryFilter"><option value="">Semua kategori</option></select><select id="sortFilter" class="sort-select"><option value="updated">Terakhir diperbarui</option><option value="name">Nama A–Z</option><option value="price-low">Harga terendah</option><option value="price-high">Harga tertinggi</option></select></div>
+          <div id="productCount" class="muted" style="font-size:11px;margin:0 0 11px">0 produk</div>
+          <div id="allProducts" class="product-list"></div>
+        </div></section>
+      </section>
+
+      <section id="view-add" class="view hidden">
+        <div class="page-head"><div><div class="eyebrow">Data produk</div><h2 id="formTitle">Tambah Produk</h2><p>Isi informasi produk dan harga jualnya.</p></div></div>
+        <section class="panel"><div class="panel-body">
+          <form id="productForm">
+            <div class="form-grid">
+              <div class="field span-2"><label for="productName">Nama produk *</label><input id="productName" maxlength="120" placeholder="Contoh: Keripik singkong pedas" required></div>
+              <div class="field"><label for="productCategory">Kategori *</label><input id="productCategory" list="categoryOptions" maxlength="60" placeholder="Pilih atau ketik kategori" required><datalist id="categoryOptions"><option>Jajanan</option><option>Makanan</option><option>Minuman</option><option>Alat tulis</option><option>Perlengkapan mandi</option><option>Perlengkapan rumah tangga</option><option>Obat manusia</option><option>Obat tanaman</option><option>Paku dan perkakas</option><option>Sandal</option><option>Lainnya</option></datalist></div>
+              <div class="field"><label for="productUnit">Satuan</label><input id="productUnit" list="unitOptions" maxlength="30" value="pcs" placeholder="Contoh: bungkus"><datalist id="unitOptions"><option>pcs</option><option>buah</option><option>bungkus</option><option>sachet</option><option>botol</option><option>kaleng</option><option>renteng</option><option>pak</option><option>pack</option><option>kotak</option><option>lusin</option><option>pasang</option><option>batang</option><option>lembar</option><option>kg</option><option>gram</option><option>liter</option><option>meter</option><option>roll</option><option>ikat</option><option>karung</option><option>strip</option></datalist><span class="hint">Boleh ketik satuan sendiri jika tidak ada di daftar.</span></div>
+              <div class="field"><label for="sellingPrice">Harga jual (Rp) *</label><input id="sellingPrice" type="number" min="0" step="1" inputmode="numeric" placeholder="Contoh: 2000" required></div>
+              <div class="field"><label for="costPrice">Harga modal (Rp)</label><input id="costPrice" type="number" min="0" step="1" inputmode="numeric" placeholder="Opsional"><span class="hint">Hanya untuk catatan pemilik.</span></div>
+              <div class="field span-2"><label for="productPhoto">Foto produk</label><input id="productPhoto" type="file" accept="image/jpeg,image/png,image/webp"><span class="file-hint">Format JPG, PNG, atau WEBP. Maksimal 5 MB.</span></div>
+              <div id="photoPreviewWrap" class="photo-preview span-2 hidden"><img id="photoPreview" alt="Pratinjau foto produk"><span id="photoPreviewText">Pratinjau foto produk</span></div>
+              <div class="field span-2"><label for="productNotes">Catatan</label><textarea id="productNotes" maxlength="500" placeholder="Contoh: rasa balado, ukuran kecil, merek, atau keterangan lain"></textarea></div>
+            </div>
+            <div class="form-actions"><button class="btn btn-ghost" id="cancelForm" type="button">Batal</button><button class="btn btn-primary" id="saveProduct" type="submit">Simpan produk</button></div>
+          </form>
+        </div></section>
+      </section>
+
+      <section id="view-settings" class="view hidden">
+        <div class="page-head"><div><div class="eyebrow">Preferensi</div><h2>Pengaturan</h2><p>Akun pemilik dan salinan data produk.</p></div></div>
+        <section class="panel"><div class="panel-body settings-list">
+          <div class="setting-item"><div><strong>Akun pemilik</strong><small id="ownerEmail">-</small></div><span class="owner-pill">AKTIF</span></div>
+          <div class="setting-item"><div><strong>Ekspor daftar produk</strong><small>Unduh nama, kategori, harga, satuan, dan catatan dalam format CSV.</small></div><button class="btn btn-secondary btn-small" id="exportCsv" type="button">Unduh CSV</button></div>
+          <div class="setting-item"><div><strong>Ekspor salinan data</strong><small>Unduh data produk dalam format JSON. Foto tetap tersimpan di penyimpanan Supabase.</small></div><button class="btn btn-secondary btn-small" id="exportJson" type="button">Unduh JSON</button></div>
+          <div class="setting-item"><div><strong>Keluar dari aplikasi</strong><small>Akhiri sesi akun pemilik pada perangkat ini.</small></div><button class="btn btn-danger btn-small" id="logoutBtn" type="button">Keluar</button></div>
+        </div></section>
+        <p class="version-note">Tio Martani Kios · V1.0 Development · Aplikasi internal pemilik toko. Jangan bagikan email dan kata sandi akun pemilik.</p>
+      </section>
+    </main>
+    <nav class="bottom-nav" aria-label="Navigasi utama">
+      <button class="nav-btn active" data-view="dashboard" type="button"><span class="nav-icon">⌂</span><span>Beranda</span></button>
+      <button class="nav-btn" data-view="products" type="button"><span class="nav-icon">▤</span><span>Produk</span></button>
+      <button class="nav-btn add" data-view="add" type="button"><span class="nav-icon">＋</span><span>Tambah</span></button>
+      <button class="nav-btn" data-view="settings" type="button"><span class="nav-icon">⚙</span><span>Pengaturan</span></button>
+    </nav>
+  </div>
+
+  <div id="modalBackdrop" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Riwayat Harga</h3><button id="closeModal" class="icon-btn" type="button" aria-label="Tutup">✕</button></div><div id="modalContent"></div></div></div>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script>
+    // Konfigurasi publik Supabase. Jangan pernah menaruh Secret Key di file browser.
+    const SUPABASE_URL = 'https://oaaryktbzjftkptoebzo.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_t_fqZsAmywN0VC12M4BTxQ_kAjeBqZS';
+    const configured = SUPABASE_URL.startsWith('https://') && SUPABASE_PUBLISHABLE_KEY.startsWith('sb_publishable_');
+
+    let client = null, currentUser = null, products = [], editingId = null, toastTimer = null, previewObjectUrl = null;
+    const $ = id => document.getElementById(id);
+    const money = value => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number(value||0));
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    const dateTime = value => new Intl.DateTimeFormat('id-ID',{dateStyle:'medium',timeStyle:'short'}).format(new Date(value));
+    function notify(message,type='success'){
+      $('toast').textContent = message;
+      $('toast').classList.toggle('error',type==='error');
+      $('toast').classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=>$('toast').classList.add('hidden'),3200);
+    }
+    function setBusy(button,busy,label){
+      if(!button)return;
+      button.disabled = busy;
+      if(busy){button.dataset.oldLabel=button.textContent;button.textContent=label||'Memproses…';}
+      else if(button.dataset.oldLabel){button.textContent=button.dataset.oldLabel;delete button.dataset.oldLabel;}
+    }
+    function showLogin(message=''){
+      $('appScreen').classList.add('hidden');$('loginScreen').classList.remove('hidden');$('loginError').textContent=message;
+    }
+    function showApp(){
+      $('loginScreen').classList.add('hidden');$('appScreen').classList.remove('hidden');$('ownerEmail').textContent=currentUser?.email||'-';
+    }
+    function navigate(view){
+      document.querySelectorAll('.view').forEach(el=>el.classList.add('hidden'));
+      $('view-'+view).classList.remove('hidden');
+      document.querySelectorAll('.nav-btn').forEach(el=>el.classList.toggle('active',el.dataset.view===view));
+      if(view==='products')renderProducts();
+      if(view==='dashboard'){renderDashboard();renderQuickSearch();}
+      if(view==='add'&&!editingId)resetProductForm();
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    function photoMarkup(product,small=false){
+      const size = small ? 'product-photo' : 'product-photo';
+      return `<div class="${size}">${product.photo_url?`<img src="${esc(product.photo_url)}" alt="Foto ${esc(product.name)}" loading="lazy">`:'▧'}</div>`;
+    }
+    function noteIndicator(product){
+      return String(product.notes||'').trim() ? '<span class="note-indicator" title="Produk memiliki catatan">✎ Ada catatan</span>' : '';
+    }
+    function productMarkup(product){
+      const cost = product.cost_price===null || product.cost_price===undefined || product.cost_price==='' ? '' : `<small>Modal ${money(product.cost_price)}</small>`;
+      return `<article class="product-row">
+        <button class="product-main" type="button" data-detail="${esc(product.id)}" aria-label="Lihat detail ${esc(product.name)}">
+          ${photoMarkup(product)}
+          <div class="product-info"><strong title="${esc(product.name)}">${esc(product.name)}</strong><div class="product-meta"><span>${esc(product.category)} · ${esc(product.unit||'pcs')}</span>${noteIndicator(product)}</div></div>
+        </button>
+        <div class="product-price">${money(product.selling_price)}${cost}</div>
+        <div class="row-actions">
+          <button class="icon-btn" type="button" title="Riwayat harga" aria-label="Riwayat harga ${esc(product.name)}" data-history="${esc(product.id)}">↗</button>
+          <button class="icon-btn" type="button" title="Edit produk" aria-label="Edit ${esc(product.name)}" data-edit="${esc(product.id)}">✎</button>
+          <button class="icon-btn danger" type="button" title="Hapus produk" aria-label="Hapus ${esc(product.name)}" data-delete="${esc(product.id)}">×</button>
+        </div>
+      </article>`;
+    }
+    async function loadProducts(){
+      const {data,error} = await client.from('products').select('*').order('updated_at',{ascending:false});
+      if(error)throw error;
+      products = data || [];
+      await Promise.all(products.map(async product=>{
+        product.photo_url='';
+        if(product.photo_path){
+          const {data:photoData,error:photoError} = await client.storage.from('product-photos').createSignedUrl(product.photo_path,86400);
+          if(!photoError)product.photo_url=photoData?.signedUrl||'';
+        }
+      }));
+      renderDashboard();renderProducts();renderQuickSearch();
+    }
+    function renderDashboard(){
+      const categories = new Set(products.map(p=>(p.category||'').trim()).filter(Boolean));
+      $('statProducts').textContent = products.length;
+      $('statCategories').textContent = categories.size;
+      $('statNoPrice').textContent = products.filter(p=>Number(p.selling_price)<=0).length;
+      const recent = products.slice(0,4);
+      $('recentProducts').innerHTML = recent.length ? recent.map(productMarkup).join('') : '<div class="empty"><b>Belum ada produk</b>Tambahkan produk pertama toko.</div>';
+    }
+    function renderQuickSearch(){
+      const input=$('quickSearch');
+      if(!input)return;
+      const query=(input.value||'').trim().toLocaleLowerCase('id-ID');
+      if(!query){$('quickResults').innerHTML='<div class="empty"><b>Mulai pencarian</b>Hasil produk akan muncul di sini.</div>';return;}
+      const matches=products.filter(p=>[p.name,p.category,p.notes,p.unit].some(value=>String(value||'').toLocaleLowerCase('id-ID').includes(query))).slice(0,6);
+      $('quickResults').innerHTML=matches.length?matches.map(p=>`<button class="quick-result" type="button" data-detail="${esc(p.id)}" aria-label="Lihat detail ${esc(p.name)}">${photoMarkup(p,true)}<div class="product-info"><strong>${esc(p.name)}</strong><div class="product-meta"><span>${esc(p.category)} · ${esc(p.unit||'pcs')}</span>${noteIndicator(p)}</div></div><div class="product-price">${money(p.selling_price)}</div></button>`).join(''):'<div class="empty"><b>Produk tidak ditemukan</b>Coba kata kunci lain.</div>';
+    }
+    function renderProducts(){
+      const search=($('searchInput').value||'').trim().toLocaleLowerCase('id-ID');
+      const category=$('categoryFilter').value;
+      const cats=[...new Set(products.map(p=>(p.category||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'id'));
+      const select=$('categoryFilter'),old=select.value;
+      select.innerHTML='<option value="">Semua kategori</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+      select.value=cats.includes(old)?old:'';
+      let filtered=products.filter(p=>{
+        const searchable=[p.name,p.category,p.notes,p.unit].join(' ').toLocaleLowerCase('id-ID');
+        return (!search||searchable.includes(search))&&(!select.value||p.category===select.value);
+      });
+      const sort=$('sortFilter').value;
+      if(sort==='name')filtered.sort((a,b)=>a.name.localeCompare(b.name,'id'));
+      else if(sort==='price-low')filtered.sort((a,b)=>Number(a.selling_price)-Number(b.selling_price));
+      else if(sort==='price-high')filtered.sort((a,b)=>Number(b.selling_price)-Number(a.selling_price));
+      else filtered.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
+      $('productCount').textContent=`Menampilkan ${filtered.length} dari ${products.length} produk`;
+      $('allProducts').innerHTML=filtered.length?filtered.map(productMarkup).join(''):'<div class="empty"><b>Produk tidak ditemukan</b>Coba kata kunci atau kategori lain, atau tambahkan produk baru.</div>';
+    }
+    function clearPhotoPreview(){
+      if(previewObjectUrl){URL.revokeObjectURL(previewObjectUrl);previewObjectUrl=null;}
+      $('photoPreviewWrap').classList.add('hidden');$('photoPreview').removeAttribute('src');$('photoPreviewText').textContent='Pratinjau foto produk';
+    }
+    function resetProductForm(){
+      editingId=null;$('productForm').reset();$('productUnit').value='pcs';$('formTitle').textContent='Tambah Produk';$('saveProduct').textContent='Simpan produk';clearPhotoPreview();
+    }
+    function editProduct(id){
+      const product=products.find(p=>p.id===id);if(!product)return;
+      editingId=id;$('productName').value=product.name;$('productCategory').value=product.category;$('productUnit').value=product.unit||'pcs';$('sellingPrice').value=product.selling_price;$('costPrice').value=product.cost_price??'';$('productNotes').value=product.notes||'';$('productPhoto').value='';
+      $('formTitle').textContent='Edit Produk';$('saveProduct').textContent='Simpan perubahan';clearPhotoPreview();
+      if(product.photo_url){$('photoPreview').src=product.photo_url;$('photoPreviewText').textContent='Foto saat ini. Pilih file baru jika ingin menggantinya.';$('photoPreviewWrap').classList.remove('hidden');}
+      navigate('add');
+    }
+    async function uploadPhoto(file,productId){
+      if(!file)return null;
+      const allowed=['image/jpeg','image/png','image/webp'];
+      if(!allowed.includes(file.type))throw new Error('Foto harus berformat JPG, PNG, atau WEBP.');
+      if(file.size>5*1024*1024)throw new Error('Ukuran foto maksimal 5 MB.');
+      const ext=({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp' })[file.type];
+      const path=`${currentUser.id}/${productId}_${Date.now()}.${ext}`;
+      const {error}=await client.storage.from('product-photos').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});
+      if(error)throw error;
+      return path;
+    }
+    async function saveProduct(event){
+      event.preventDefault();
+      const button=$('saveProduct');setBusy(button,true,'Menyimpan…');
+      let uploadedPath=null;
+      try{
+        const name=$('productName').value.trim(),category=$('productCategory').value.trim(),unit=$('productUnit').value.trim()||'pcs';
+        const selling=Number($('sellingPrice').value),cost=$('costPrice').value===''?null:Number($('costPrice').value),notes=$('productNotes').value.trim(),file=$('productPhoto').files[0];
+        if(!name||!category||!Number.isFinite(selling)||selling<0)throw new Error('Periksa kembali nama, kategori, dan harga jual.');
+        if(cost!==null&&(!Number.isFinite(cost)||cost<0))throw new Error('Harga modal tidak valid.');
+        if(editingId){
+          const old=products.find(p=>p.id===editingId);if(!old)throw new Error('Produk tidak ditemukan. Muat ulang halaman lalu coba lagi.');
+          let photo_path=old.photo_path||null;
+          if(file){uploadedPath=await uploadPhoto(file,editingId);photo_path=uploadedPath;}
+          const {error}=await client.from('products').update({name,category,unit,selling_price:selling,cost_price:cost,notes,photo_path}).eq('id',editingId);
+          if(error)throw error;
+          if(file&&old.photo_path){const {error:removeError}=await client.storage.from('product-photos').remove([old.photo_path]);if(removeError)console.warn('Foto lama belum terhapus:',removeError.message);}
+          notify('Produk berhasil diperbarui.');
+        }else{
+          const {data,error}=await client.from('products').insert({owner_id:currentUser.id,name,category,unit,selling_price:selling,cost_price:cost,notes}).select().single();
+          if(error)throw error;
+          if(file){
+            try{
+              uploadedPath=await uploadPhoto(file,data.id);
+              const {error:updateError}=await client.from('products').update({photo_path:uploadedPath}).eq('id',data.id);
+              if(updateError)throw updateError;
+            }catch(photoError){
+              await client.from('products').delete().eq('id',data.id);
+              if(uploadedPath)await client.storage.from('product-photos').remove([uploadedPath]);
+              throw new Error('Produk belum disimpan karena foto gagal diunggah: '+photoError.message);
+            }
+          }
+          notify('Produk berhasil ditambahkan.');
+        }
+        resetProductForm();await loadProducts();navigate('products');
+      }catch(error){
+        if(uploadedPath&&editingId){await client.storage.from('product-photos').remove([uploadedPath]);}
+        notify(error.message||'Gagal menyimpan produk.', 'error');
+      }finally{setBusy(button,false);}
+    }
+    async function deleteProduct(id){
+      const product=products.find(p=>p.id===id);if(!product||!confirm(`Hapus produk “${product.name}”? Tindakan ini tidak dapat dibatalkan.`))return;
+      try{
+        const {error}=await client.from('products').delete().eq('id',id);if(error)throw error;
+        if(product.photo_path){const {error:photoError}=await client.storage.from('product-photos').remove([product.photo_path]);if(photoError)console.warn('Produk terhapus, tetapi foto lama belum terhapus:',photoError.message);}
+        await loadProducts();notify('Produk berhasil dihapus.');
+      }catch(error){notify(error.message||'Gagal menghapus produk.','error');}
+    }
+    function showProductDetail(id){
+      const product=products.find(p=>p.id===id);if(!product)return;
+      const notes=String(product.notes||'').trim();
+      const cost=product.cost_price===null||product.cost_price===undefined||product.cost_price===''?null:product.cost_price;
+      $('modalTitle').textContent='Detail Produk';
+      $('modalContent').innerHTML=`
+        <div class="detail-layout">
+          <div class="detail-photo">${product.photo_url?`<img src="${esc(product.photo_url)}" alt="Foto ${esc(product.name)}">`:'▧'}</div>
+          <div><div class="detail-name">${esc(product.name)}</div><div class="detail-category">${esc(product.category)} · ${esc(product.unit||'pcs')}</div>${notes?'<span class="note-indicator" style="margin-top:9px">✎ Memiliki catatan</span>':''}</div>
+        </div>
+        <div class="detail-prices">
+          <div class="detail-price"><span>Harga jual</span><strong>${money(product.selling_price)}</strong></div>
+          ${cost===null?'':`<div class="detail-price"><span>Harga modal</span><strong>${money(cost)}</strong></div>`}
+        </div>
+        <div class="detail-notes"><div class="detail-note-head"><span class="detail-label">Catatan produk</span>${notes?'<span class="note-indicator">Ada catatan</span>':''}</div><p class="${notes?'':'no-note'}">${notes?esc(notes):'Tidak ada catatan untuk produk ini.'}</p></div>`;
+      $('modalBackdrop').classList.remove('hidden');
+    }
+    async function showHistory(id){
+      const product=products.find(p=>p.id===id);if(!product)return;
+      $('modalTitle').textContent=`Riwayat Harga · ${product.name}`;
+      $('modalContent').innerHTML='<p class="sub">Memuat riwayat harga…</p>';$('modalBackdrop').classList.remove('hidden');
+      const {data,error}=await client.from('price_history').select('*').eq('product_id',id).order('changed_at',{ascending:false}).limit(50);
+      if(error){$('modalContent').innerHTML=`<p class="sub" style="color:var(--red)">${esc(error.message)}</p>`;return;}
+      const rows=data||[];
+      $('modalContent').innerHTML=rows.length?rows.map(row=>`<div class="history-item"><div><b>${money(row.old_price)} → ${money(row.new_price)}</b><small>${dateTime(row.changed_at)}</small></div><span class="history-change">${Number(row.new_price)>Number(row.old_price)?'Naik':Number(row.new_price)<Number(row.old_price)?'Turun':'Berubah'}</span></div>`).join(''):'<div class="empty"><b>Belum ada perubahan harga</b>Riwayat akan tercatat otomatis saat harga jual produk diubah.</div>';
+    }
+    function safeCsvCell(value){
+      let text=String(value??'');
+      if(/^[\s]*[=+@\-]/.test(text))text="'"+text;
+      return '"'+text.replace(/"/g,'""')+'"';
+    }
+    function downloadFile(content,type,filename){
+      const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download=filename;document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    }
+    function exportCsv(){
+      const headers=['Nama Produk','Kategori','Harga Jual','Harga Modal','Satuan','Catatan','Tanggal Dibuat','Terakhir Diperbarui'];
+      const rows=products.map(p=>[p.name,p.category,p.selling_price,p.cost_price??'',p.unit,p.notes||'',p.created_at,p.updated_at]);
+      const csv=[headers,...rows].map(row=>row.map(safeCsvCell).join(',')).join('\r\n');
+      downloadFile('\ufeff'+csv,'text/csv;charset=utf-8;','data-produk-tio-martani.csv');notify('File CSV berhasil diunduh.');
+    }
+    function exportJson(){
+      const payload={application:'Tio Martani Kios',version:'1.0-development',exported_at:new Date().toISOString(),note:'File ini berisi data teks produk dan photo_path. File foto tetap tersimpan di Supabase Storage.',products:products.map(({photo_url,...p})=>p)};
+      downloadFile(JSON.stringify(payload,null,2),'application/json;charset=utf-8;','backup-data-tio-martani.json');notify('Salinan data JSON berhasil diunduh.');
+    }
+
+    $('loginForm').addEventListener('submit',async event=>{
+      event.preventDefault();if(!configured){$('loginError').textContent='Konfigurasi Supabase belum lengkap.';return;}
+      const button=$('loginButton');setBusy(button,true,'Memeriksa akun…');$('loginError').textContent='';
+      try{
+        const {data,error}=await client.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
+        if(error)throw error;
+        currentUser=data.user;showApp();await loadProducts();
+      }catch(error){$('loginError').textContent='Tidak dapat masuk. Periksa email dan kata sandi, lalu coba lagi.';console.error(error);}
+      finally{setBusy(button,false);}
+    });
+    $('productForm').addEventListener('submit',saveProduct);
+    $('cancelForm').addEventListener('click',()=>{resetProductForm();navigate('products');});
+    $('searchInput').addEventListener('input',renderProducts);
+    $('categoryFilter').addEventListener('change',renderProducts);
+    $('sortFilter').addEventListener('change',renderProducts);
+    $('quickSearch').addEventListener('input',renderQuickSearch);
+    $('productPhoto').addEventListener('change',event=>{
+      clearPhotoPreview();const file=event.target.files?.[0];if(!file)return;
+      if(!['image/jpeg','image/png','image/webp'].includes(file.type)){event.target.value='';notify('Pilih foto JPG, PNG, atau WEBP.','error');return;}
+      if(file.size>5*1024*1024){event.target.value='';notify('Ukuran foto maksimal 5 MB.','error');return;}
+      previewObjectUrl=URL.createObjectURL(file);$('photoPreview').src=previewObjectUrl;$('photoPreviewText').textContent=file.name;$('photoPreviewWrap').classList.remove('hidden');
+    });
+    document.querySelectorAll('.nav-btn').forEach(button=>button.addEventListener('click',()=>navigate(button.dataset.view)));
+    $('goProducts').addEventListener('click',()=>navigate('products'));
+    $('addFromProducts').addEventListener('click',()=>{resetProductForm();navigate('add');});
+    $('logoutBtn').addEventListener('click',async()=>{
+      const {error}=await client.auth.signOut();if(error){notify('Gagal keluar: '+error.message,'error');return;}
+      currentUser=null;products=[];showLogin();$('password').value='';notify('Kamu sudah keluar dari aplikasi.');
+    });
+    $('exportCsv').addEventListener('click',exportCsv);
+    $('exportJson').addEventListener('click',exportJson);
+    document.addEventListener('click',event=>{
+      const edit=event.target.closest('[data-edit]'),del=event.target.closest('[data-delete]'),history=event.target.closest('[data-history]'),detail=event.target.closest('[data-detail]');
+      if(edit)editProduct(edit.dataset.edit);
+      else if(del)deleteProduct(del.dataset.delete);
+      else if(history)showHistory(history.dataset.history);
+      else if(detail)showProductDetail(detail.dataset.detail);
+    });
+    $('closeModal').addEventListener('click',()=>$('modalBackdrop').classList.add('hidden'));
+    $('modalBackdrop').addEventListener('click',event=>{if(event.target===$('modalBackdrop'))$('modalBackdrop').classList.add('hidden');});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape')$('modalBackdrop').classList.add('hidden');});
+
+    async function init(){
+      if(!configured){showLogin('Aplikasi belum dikonfigurasi.');return;}
+      if(!window.supabase?.createClient){showLogin('Koneksi pustaka Supabase gagal. Periksa koneksi internet lalu muat ulang.');return;}
+      client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+      const {data,error}=await client.auth.getSession();
+      if(error){showLogin('Tidak dapat memeriksa sesi. Silakan masuk kembali.');return;}
+      if(data.session){currentUser=data.session.user;showApp();try{await loadProducts();}catch(loadError){notify('Gagal memuat data: '+loadError.message,'error');}}
+      else showLogin();
+      client.auth.onAuthStateChange((event,session)=>{
+        if(event==='SIGNED_OUT'||!session){currentUser=null;products=[];showLogin();}
+      });
+    }
+    init();
+  </script>
+</body>
+</html>
