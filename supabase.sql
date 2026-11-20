@@ -8,6 +8,7 @@ create table if not exists public.products (
   selling_price numeric(14,2) not null default 0 check (selling_price >= 0),
   cost_price numeric(14,2) check (cost_price is null or cost_price >= 0),
   unit text not null default 'pcs',
+  barcode text,
   photo_path text,
   notes text,
   created_at timestamptz not null default now(),
@@ -25,6 +26,7 @@ create table if not exists public.price_history (
 
 create index if not exists products_owner_updated_idx on public.products(owner_id, updated_at desc);
 create index if not exists products_owner_category_idx on public.products(owner_id, category);
+create unique index if not exists products_owner_barcode_unique_idx on public.products(owner_id, barcode) where barcode is not null and btrim(barcode) <> '';
 create index if not exists price_history_product_changed_idx on public.price_history(product_id, changed_at desc);
 
 alter table public.products enable row level security;

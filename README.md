@@ -1,46 +1,73 @@
-# Tio Martani Kios — V1.0 Development
+# Tio Martani Kios — V1.4.3
 
-Aplikasi web internal, mobile-first, untuk pemilik toko. Versi ini masih untuk pengembangan dan pengujian lokal; belum dipublikasikan.
+Aplikasi web internal mobile-first untuk mengelola katalog produk dan harga Tio Martani Kios.
 
-## Isi folder
-- `index.html` — aplikasi yang terhubung ke proyek Supabase toko.
-- `supabase.sql` — struktur database, RLS, trigger riwayat harga, dan aturan penyimpanan foto.
-- `grant-access.sql` — pemberian hak akses tabel untuk pengguna yang sudah login (jalankan hanya bila dibutuhkan).
+## Perbaikan pada V1.4.3
 
-## Fitur V1.0 Development
-- Login pemilik toko.
-- Dashboard ringkasan jumlah produk, kategori, dan harga yang perlu dicek.
-- Pencarian harga cepat dari dashboard.
-- Tambah, edit, dan hapus produk.
-- Kategori dan satuan yang bisa diketik sendiri.
-- Harga jual dan harga modal.
-- Foto produk dengan pratinjau (JPG/PNG/WEBP, maksimal 5 MB).
-- Pencarian berdasarkan nama, kategori, satuan, dan catatan.
-- Filter kategori dan pengurutan daftar produk.
-- Riwayat perubahan harga jual.
-- Ekspor CSV dan JSON (metadata produk; file foto tetap tersimpan di Supabase Storage).
-- Tampilan responsif untuk HP dan laptop.
+- Pencarian foto sekarang memiliki pilihan terpisah: **Ambil Foto dengan Kamera** dan **Pilih Foto dari Galeri**.
+- Tombol kamera membuka pratinjau kamera langsung melalui izin kamera browser (`getUserMedia`), bukan membuka folder/file picker.
+- Kamera belakang diutamakan pada HP; webcam digunakan pada komputer jika tersedia.
+- Pengguna dapat menekan tombol **Jepret Foto**, meninjau hasilnya, lalu mengirimnya untuk analisis AI.
+- Foto ditampilkan sebagai pratinjau, diperkecil di browser, lalu dikirim ke Supabase Edge Function.
+- Ditambahkan tombol **Periksa Koneksi AI** untuk mengecek apakah Edge Function, API Key, dan model Gemini sudah tersambung.
+- Pesan kesalahan dibuat lebih jelas untuk kasus fungsi belum di-deploy, sesi login berakhir, API Key salah, kuota habis, dan gangguan layanan.
+- Konfigurasi Gemini disederhanakan: model yang digunakan adalah `gemini-3.1-flash-lite`. Cukup siapkan satu secret bernama `GEMINI_API_KEY`.
+- Pengaturan batas token dan thinking model diperbaiki agar proses pengenalan foto lebih stabil.
+- Harga produk tetap hanya diambil dari database Supabase. AI tidak membuat atau menebak harga dan tidak otomatis menyimpan produk.
 
-## Cara membuka untuk pengujian lokal
-1. Ekstrak ZIP.
-2. Buka folder `tio-martani-kios`.
-3. Klik dua kali `index.html`.
-4. Login menggunakan akun pemilik yang sudah dibuat di Supabase.
+## Fitur aplikasi yang dipertahankan
 
-## Catatan database
-- Database yang sudah dibuat sebelumnya tidak perlu dibuat ulang.
-- `supabase.sql` adalah skrip setup awal, bukan untuk dijalankan ulang sembarangan pada database berisi data.
-- `grant-access.sql` hanya perlu dijalankan bila muncul error izin akses tabel dan sesuai arahan.
-
-## Catatan keamanan sebelum rilis
-- Aplikasi hanya memakai Supabase Project URL dan Publishable Key. Jangan pernah memasukkan Secret Key atau service-role key ke HTML/JavaScript browser.
-- Pastikan RLS aktif pada tabel `products` dan `price_history` serta Storage bucket `product-photos` bersifat private.
-- Pastikan pendaftaran akun publik dimatikan di pengaturan Supabase Authentication; akun pemilik dibuat manual.
-- Secret Key yang pernah terlihat di screenshot sebaiknya dirotasi sebelum aplikasi dipublikasikan. Jangan kirim Secret Key melalui chat.
-- Uji akses dengan akun pemilik dan pastikan akun lain tidak dapat membaca data pemilik.
-
-## Belum termasuk
-- Import Excel.
+- Login pemilik.
+- Pencarian produk berdasarkan nama dan barcode.
 - Pemindaian barcode.
-- Cetak label harga.
-- Manajemen stok dan transaksi kasir.
+- Pencarian produk dengan foto AI.
+- Detail harga dan riwayat perubahan harga.
+- Pengelolaan produk dan foto produk.
+- Import produk Excel/CSV.
+- Ekspor data CSV/JSON.
+
+## Penting: AI harus diaktifkan di Supabase
+
+Kode AI berada di:
+
+`supabase/functions/recognize-product/index.ts`
+
+Agar fitur foto benar-benar bekerja, lakukan dua hal berikut:
+
+1. Simpan secret `GEMINI_API_KEY` di Supabase → Edge Functions → Secrets.
+2. Deploy kode `recognize-product` ke Supabase Edge Functions.
+
+Ikuti panduan pemula di `SETUP-AI.md`. Jangan memasukkan Gemini API Key atau Supabase Secret Key ke `index.html` atau mengirimkannya melalui chat.
+
+## Cara menguji
+
+1. Buka aplikasi dan login.
+2. Tekan tombol **Foto** di Beranda atau halaman Produk.
+3. Tekan **Periksa Koneksi AI** terlebih dahulu.
+4. Jika tes berhasil, tekan **Ambil Foto dengan Kamera** untuk membuka pratinjau kamera, atau **Pilih Foto dari Galeri**.
+5. Jika menggunakan kamera, tekan **Jepret Foto**. Periksa pratinjau foto, lalu lanjutkan.
+6. Periksa pratinjau foto, lalu tekan **Analisis Foto dengan AI**.
+7. Periksa hasil pengenalan dan pilih produk yang cocok untuk melihat harga.
+
+## Catatan kamera
+
+- Tombol **Ambil Foto dengan Kamera** membuka kamera langsung di dalam aplikasi menggunakan izin kamera browser.
+- Pada HP, aplikasi mengutamakan kamera belakang. Pada komputer, aplikasi menggunakan webcam jika tersedia.
+- Kamera browser memerlukan halaman HTTPS (atau localhost saat pengembangan). Jika aplikasi dibuka sebagai file lokal, kamera tidak akan tersedia.
+- Jika izin kamera ditolak, klik ikon pengaturan/gembok di sebelah alamat situs, ubah izin Kamera menjadi Izinkan, lalu muat ulang aplikasi.
+- Jika kamera sedang dipakai aplikasi lain, tutup aplikasi tersebut terlebih dahulu. Pilihan galeri tetap tersedia sebagai alternatif.
+
+## Privasi dan biaya
+
+- Foto dikirim dari browser ke Supabase Edge Function, lalu ke Gemini untuk pengenalan.
+- Gemini API Free Tier dapat digunakan sesuai ketersediaan dan batas penggunaan yang berlaku. Kuota dapat berubah dan tidak tak terbatas.
+- Konten pada Free Tier dapat digunakan Google untuk meningkatkan produk. Jangan mengirim foto wajah, dokumen, struk berisi data pribadi, atau informasi sensitif.
+- API Key hanya disimpan sebagai Supabase Secret. Jangan pernah menaruhnya di HTML/JavaScript frontend.
+- Jangan mengaktifkan billing jika ingin tetap menggunakan Free Tier.
+
+## Database dan keamanan
+
+- Versi ini tidak memerlukan perubahan tabel database.
+- Edge Function memeriksa sesi login pengguna.
+- `verify_jwt = true` harus tetap aktif.
+- RLS dan bucket foto produk tetap mengikuti pengaturan database sebelumnya.
