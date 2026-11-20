@@ -1,0 +1,2 @@
+[functions.recognize-product]
+verify_jwt = true
