@@ -1,8 +1,18 @@
-# Tio Martani Kios — V1.4.3
+# Tio Martani Kios — V1.4.5
 
 Aplikasi web internal mobile-first untuk mengelola katalog produk dan harga Tio Martani Kios.
 
-## Perbaikan pada V1.4.3
+## Perbaikan pada V1.4.5
+
+- Hasil pencarian foto hanya menampilkan produk yang cocok dari katalog toko; tidak menampilkan uraian atau tebakan AI.
+- Satu produk dengan kecocokan tertinggi ditampilkan pada bagian **Paling cocok**; produk lain yang sejenis ditampilkan di bawahnya.
+- Pencocokan memprioritaskan merek dan varian yang benar-benar terbaca, kemudian jenis barang.
+- Jika foto ambigu, Gemini dapat mengirim beberapa kandidat jenis barang yang diurutkan dari paling mungkin, misalnya gula pasir atau beras.
+- Mengetuk hasil membuka **Detail Produk** terlebih dahulu. Produk tidak otomatis masuk ke keranjang.
+- Harga, barcode, kategori, dan catatan detail tetap dibaca dari katalog Supabase.
+- Edge Function mencatat waktu respons Gemini di Logs dan membatasi waktu tunggu hingga 35 detik.
+
+## Perbaikan yang tetap tersedia dari V1.4.3
 
 - Pencarian foto sekarang memiliki pilihan terpisah: **Ambil Foto dengan Kamera** dan **Pilih Foto dari Galeri**.
 - Tombol kamera membuka pratinjau kamera langsung melalui izin kamera browser (`getUserMedia`), bukan membuka folder/file picker.
@@ -11,7 +21,7 @@ Aplikasi web internal mobile-first untuk mengelola katalog produk dan harga Tio 
 - Foto ditampilkan sebagai pratinjau, diperkecil di browser, lalu dikirim ke Supabase Edge Function.
 - Ditambahkan tombol **Periksa Koneksi AI** untuk mengecek apakah Edge Function, API Key, dan model Gemini sudah tersambung.
 - Pesan kesalahan dibuat lebih jelas untuk kasus fungsi belum di-deploy, sesi login berakhir, API Key salah, kuota habis, dan gangguan layanan.
-- Konfigurasi Gemini disederhanakan: model yang digunakan adalah `gemini-3.1-flash-lite`. Cukup siapkan satu secret bernama `GEMINI_API_KEY`.
+- Model Gemini dibaca dari secret `GEMINI_VISION_MODEL`; gunakan nilai `gemini-3.1-flash-lite`. API Key tetap disimpan di secret `GEMINI_API_KEY`.
 - Pengaturan batas token dan thinking model diperbaiki agar proses pengenalan foto lebih stabil.
 - Harga produk tetap hanya diambil dari database Supabase. AI tidak membuat atau menebak harga dan tidak otomatis menyimpan produk.
 

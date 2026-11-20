@@ -1,4 +1,4 @@
-# Panduan Mengaktifkan Foto AI — Tio Martani Kios V1.4.3
+# Panduan Mengaktifkan Foto AI — Tio Martani Kios V1.4.5
 
 Panduan ini dibuat untuk pengguna yang tidak perlu memahami pemrograman. Ikuti langkahnya satu per satu. **Jangan mengirim API Key atau kata sandi ke siapa pun, termasuk melalui chat.**
 
@@ -9,7 +9,7 @@ Setelah selesai, pengguna dapat:
 2. Memotret barang menggunakan kamera belakang HP.
 3. Atau memilih foto barang dari galeri.
 4. Memeriksa hasil pengenalan Gemini.
-5. Melihat daftar produk toko yang cocok dan memilih produk yang benar.
+5. Melihat satu produk paling cocok dan daftar produk sejenis, lalu membuka detail produk sebelum mengambil tindakan berikutnya.
 
 Harga tetap berasal dari database Supabase, bukan dari perkiraan AI.
 
@@ -49,7 +49,7 @@ Referensi resmi:
 Penting:
 - Nama secret harus tepat `GEMINI_API_KEY` (huruf kapital).
 - Jangan menambahkan tanda kutip di awal/akhir key.
-- Tidak perlu menambahkan secret `GEMINI_VISION_MODEL`; nama model sudah diatur di dalam kode.
+- Tambahkan atau pertahankan secret `GEMINI_VISION_MODEL` dengan nilai `gemini-3.1-flash-lite`. Jika secret tidak tersedia, fungsi menggunakan model default `gemini-3.1-flash-lite`.
 - Jangan menghapus secret Supabase lain yang digunakan aplikasi.
 
 ## Langkah 3 — Pasang / perbarui fungsi AI di Supabase
@@ -61,7 +61,7 @@ Penting:
 
    `recognize-product`
 
-5. Di komputer, buka folder hasil ekstrak ZIP V1.4.2.
+5. Di komputer, buka folder hasil ekstrak ZIP V1.4.5.
 6. Buka file:
 
    `supabase/functions/recognize-product/index.ts`
@@ -75,7 +75,7 @@ Jangan membuat nama fungsi lain seperti `recognize_product`, `recognize-photo`, 
 
 ## Langkah 4 — Tes koneksi dari aplikasi
 
-1. Buka aplikasi Tio Martani Kios V1.4.3.
+1. Buka aplikasi Tio Martani Kios V1.4.5.
 2. Login menggunakan akun pemilik seperti biasa.
 3. Buka Beranda atau Produk.
 4. Tekan tombol **Foto**.
@@ -117,7 +117,7 @@ Jika ingin menggunakan gambar yang sudah ada, tekan **Pilih Foto dari Galeri**.
 
 ## Hal yang perlu diperhatikan tentang kamera
 
-- V1.4.3 menggunakan kamera langsung di dalam halaman aplikasi, bukan jendela pemilih file.
+- V1.4.5 menggunakan kamera langsung di dalam halaman aplikasi, bukan jendela pemilih file.
 - Fitur ini bekerja pada HP yang memiliki kamera dan komputer yang memiliki webcam.
 - Browser mungkin meminta izin kamera pada penggunaan pertama. Jika izin pernah ditolak, ubah izin Kamera menjadi Izinkan melalui pengaturan situs di sebelah alamat web, lalu muat ulang aplikasi.
 - Kamera langsung memerlukan alamat HTTPS (atau localhost saat pengembangan). Jika `index.html` dibuka langsung dari folder komputer, kamera dapat diblokir.

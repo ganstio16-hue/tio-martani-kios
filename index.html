@@ -49,6 +49,20 @@
     .photo-detected h4{font-size:17px;margin:0 0 5px}
     .photo-detected p{font-size:11px;color:var(--muted);line-height:1.5;margin:0}
     .photo-match-list{display:grid;gap:8px;margin-top:10px}
+    .photo-results-heading{font-size:13px;font-weight:800;color:var(--text);margin:14px 0 10px}
+    .photo-match-section{margin:0 0 14px}
+    .photo-match-section-title{font-size:11px;font-weight:800;color:var(--muted);margin:0 0 7px}
+    .photo-match{display:flex;align-items:center;gap:11px;padding:10px;border:1px solid var(--line);border-radius:13px;background:#fff;width:100%;text-align:left;color:inherit;cursor:pointer}
+    .photo-match:hover{border-color:#a9cdb6;background:#fbfefc}
+    .photo-match-primary{border:2px solid var(--green);background:var(--green-soft)}
+    .photo-match-image{width:54px;height:54px;flex:0 0 54px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;overflow:hidden;color:var(--muted);font-size:22px}
+    .photo-match-image img{width:100%;height:100%;object-fit:cover}
+    .photo-match .product-info{flex:1;min-width:0}
+    .photo-match .product-info strong{display:block;font-size:13px;white-space:normal;line-height:1.35}
+    .photo-match .product-info small{display:block;font-size:12px;font-weight:800;color:var(--text);margin-top:5px}
+    .photo-match-arrow{font-size:24px;color:var(--muted);line-height:1}
+    .photo-search-empty{padding:14px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px;text-align:center;margin-top:12px}
+
     .photo-match{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:13px;background:#fff;width:100%;text-align:left;color:inherit}
     .photo-match:hover{border-color:#a9cdb6;background:#fbfefc}
     .photo-match .product-info{flex:1;min-width:0}
@@ -83,6 +97,14 @@
     @media(max-width:360px){.owner-pill{display:none}.stats{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:1/-1}.page-head .btn{padding:10px;font-size:12px}}
   
     .product-main{display:flex;align-items:center;gap:10px;flex:1;min-width:0;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}.product-main .product-info{min-width:0}.product-main:hover .product-info strong{text-decoration:underline;text-decoration-color:#9bc9ac;text-underline-offset:3px}.product-meta{display:flex;align-items:center;gap:6px;min-width:0;margin-top:4px}.product-meta>span:first-child{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.note-indicator{display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;padding:3px 6px;border-radius:6px;background:var(--amber-soft);color:var(--amber);font-size:9px;font-weight:800;line-height:1.2}.quick-result{width:100%;font:inherit;color:inherit;text-align:left;cursor:pointer}.quick-result:hover,.product-row:focus-within{border-color:#b8d5c2}.detail-layout{display:grid;grid-template-columns:100px 1fr;gap:14px;align-items:center;margin-bottom:16px}.detail-photo{width:100px;height:100px;border-radius:16px;background:var(--surface-2);display:grid;place-items:center;overflow:hidden;color:#96a39a;font-size:28px}.detail-photo img{width:100%;height:100%;object-fit:cover}.detail-name{font-size:17px;font-weight:800;line-height:1.3;margin-bottom:6px;overflow-wrap:anywhere}.detail-category{font-size:12px;color:var(--muted)}.detail-prices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}.detail-price{padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2)}.detail-price span,.detail-label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:5px}.detail-price strong{font-size:16px;overflow-wrap:anywhere}.detail-notes{padding:13px;border:1px solid var(--line);border-radius:13px;background:#fff}.detail-notes p{margin:0;font-size:13px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}.detail-notes .no-note{color:var(--muted);font-style:italic}.detail-note-head{display:flex;align-items:center;gap:7px;margin-bottom:7px}.detail-code{font-size:11px;color:var(--muted);margin-top:5px;overflow-wrap:anywhere}.detail-note-head .detail-label{margin:0}
+  
+    .photo-match.photo-match-primary{border:2px solid var(--green);background:var(--green-soft)}
+    .photo-match .product-info strong{display:block;font-size:13px;white-space:normal;line-height:1.35}
+    .photo-match .product-info small{display:block;font-size:12px;font-weight:800;color:var(--text);margin-top:5px}
+    .photo-match-image{width:54px;height:54px;flex:0 0 54px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;overflow:hidden;color:var(--muted);font-size:22px}
+    .photo-match-image img{width:100%;height:100%;object-fit:cover}
+    .photo-match-arrow{font-size:24px;color:var(--muted);line-height:1}
+    .photo-search-empty{padding:14px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px;text-align:center;margin-top:12px}
   </style>
 </head>
 <body>
@@ -159,7 +181,7 @@
           <div class="setting-item"><div><strong>Ekspor salinan data</strong><small>Unduh data produk dalam format JSON. Foto tetap tersimpan di penyimpanan Supabase.</small></div><button class="btn btn-secondary btn-small" id="exportJson" type="button">Unduh JSON</button></div>
           <div class="setting-item"><div><strong>Keluar dari aplikasi</strong><small>Akhiri sesi akun pemilik pada perangkat ini.</small></div><button class="btn btn-danger btn-small" id="logoutBtn" type="button">Keluar</button></div>
         </div></section>
-        <p class="version-note">Tio Martani Kios · V1.4.3 · Aplikasi internal pemilik toko. Jangan bagikan email dan kata sandi akun pemilik.</p>
+        <p class="version-note">Tio Martani Kios · V1.4.5 · Aplikasi internal pemilik toko. Jangan bagikan email dan kata sandi akun pemilik.</p>
         <section class="panel" style="margin-top:14px">
           <div class="panel-head"><div><h3>Import produk dari Excel atau CSV</h3><p>Tambahkan banyak produk sekaligus tanpa mengisi formulir satu per satu.</p></div></div>
           <div class="panel-body">
@@ -627,60 +649,74 @@
       const ignored=new Set(['dan','atau','dengan','untuk','dari','yang','produk','barang','kemasan','isi','pack','pcs','buah','sachet','bungkus','botol','dus','jenis']);
       return normalizePhotoText(value).split(' ').filter(token=>token.length>=2&&!ignored.has(token));
     }
-    function photoProductScore(product,analysis){
+    function photoProductMatch(product,analysis){
       const name=normalizePhotoText(product.name);
       const notes=normalizePhotoText(product.notes);
-      const category=normalizePhotoText(product.category);
-      const nameTokens=photoTokens(product.name);
-      const noteTokens=photoTokens(product.notes);
-      const primary=normalizePhotoText(analysis.product_type||analysis.detected_name);
-      const primaryTokens=photoTokens(primary);
+      const productText=` ${name} ${notes} `;
+      const allTokens=new Set([...photoTokens(product.name),...photoTokens(product.notes)]);
+      const containsPhrase=phrase=>{
+        const normalized=normalizePhotoText(phrase);
+        return !!normalized&&productText.includes(` ${normalized} `);
+      };
       const brand=normalizePhotoText(analysis.brand);
       const variant=normalizePhotoText(analysis.variant);
-      const related=[...(Array.isArray(analysis.related_terms)?analysis.related_terms:[]),...(Array.isArray(analysis.search_terms)?analysis.search_terms:[])].map(normalizePhotoText).filter(term=>term.length>=2);
-      let score=0;
-      let typeMatched=false;
+      const size=normalizePhotoText(analysis.size);
+      const brandMatched=containsPhrase(brand);
+      const variantMatched=containsPhrase(variant);
+      const sizeMatched=containsPhrase(size);
 
-      // Nama jenis produk adalah dasar pencocokan; merek hanya menaikkan urutan.
-      if(primary){
-        if(name===primary){score=100;typeMatched=true;}
-        else if(name.includes(primary)){score=96;typeMatched=true;}
-        else if(primary.length>=4&&primary.includes(name)){score=74;typeMatched=true;}
-        else {
-          const overlap=primaryTokens.filter(token=>nameTokens.includes(token)).length;
-          if(overlap){
-            typeMatched=true;
-            const ratio=overlap/Math.max(1,primaryTokens.length);
-            score=Math.max(score,Math.round(42+32*ratio));
-          }
-        }
+      const primary=normalizePhotoText(analysis.product_type||analysis.detected_name);
+      const candidateTypes=[primary,...(Array.isArray(analysis.product_type_candidates)?analysis.product_type_candidates:[])]
+        .map(normalizePhotoText).filter(Boolean)
+        .filter((value,index,array)=>array.indexOf(value)===index).slice(0,3);
+      if(!candidateTypes.length&&analysis.detected_name){
+        candidateTypes.push(normalizePhotoText(analysis.detected_name));
       }
 
-      // Sinonim/varian dekat membantu menemukan produk sejenis walau nama tidak identik.
-      for(const term of related){
-        if(name===term){score=Math.max(score,86);typeMatched=true;continue;}
-        if(name.includes(term)||term.includes(name)){score=Math.max(score,82);typeMatched=true;continue;}
-        const termTokens=photoTokens(term);
-        const overlap=termTokens.filter(token=>nameTokens.includes(token)).length;
-        if(overlap){
-          typeMatched=true;
-          const ratio=overlap/Math.max(1,termTokens.length);
-          score=Math.max(score,Math.round(38+28*ratio));
-        }
+      function phraseScore(candidate){
+        if(!candidate)return 0;
+        if(name===candidate)return 120;
+        if(name.includes(candidate))return 112;
+        if(candidate.includes(name)&&name.length>=4)return 82;
+        const tokens=photoTokens(candidate);
+        if(!tokens.length)return 0;
+        const overlap=tokens.filter(token=>allTokens.has(token)).length;
+        const ratio=overlap/tokens.length;
+        if(overlap===0||ratio<0.30)return 0;
+        return Math.round(42+58*ratio);
       }
 
-      // Catatan produk dapat menjadi petunjuk tambahan, tetapi tidak boleh berdiri sendiri.
-      if(!typeMatched&&primaryTokens.length){
-        const noteOverlap=primaryTokens.filter(token=>noteTokens.includes(token)).length;
-        if(noteOverlap){typeMatched=true;score=Math.max(score,35+Math.round(20*noteOverlap/primaryTokens.length));}
+      let typeScore=0;
+      let candidateIndex=99;
+      for(let i=0;i<candidateTypes.length;i++){
+        const rawScore=phraseScore(candidateTypes[i]);
+        if(!rawScore)continue;
+        const weighted=rawScore*(i===0?1:(i===1?0.82:0.70));
+        if(weighted>typeScore){typeScore=weighted;candidateIndex=i;}
       }
 
-      if(!typeMatched)return 0;
-      if(brand&&(name.includes(brand)||notes.includes(brand)))score=Math.min(100,score+24);
-      if(variant&&(name.includes(variant)||notes.includes(variant)))score=Math.min(100,score+8);
-      const aiCategory=normalizePhotoText(analysis.category);
-      if(aiCategory&&category&&aiCategory===category)score=Math.min(100,score+5);
-      return Math.min(100,score);
+      const terms=[
+        ...(Array.isArray(analysis.search_terms)?analysis.search_terms:[]),
+        ...(Array.isArray(analysis.related_terms)?analysis.related_terms:[])
+      ].map(normalizePhotoText).filter(Boolean);
+      let termScore=0;
+      for(const term of terms){
+        const raw=phraseScore(term);
+        if(raw)termScore=Math.max(termScore,raw*0.38);
+      }
+
+      // Merek tidak boleh membuat produk dari jenis yang sama sekali berbeda ikut muncul.
+      if(typeScore<42)return null;
+      const score=typeScore+termScore+(brandMatched?90:0)+(variantMatched?24:0)+(sizeMatched?7:0);
+      return {
+        score,
+        typeScore,
+        candidateIndex,
+        brandMatched,
+        variantMatched,
+        sizeMatched,
+        exactType:name===primary
+      };
     }
     function setPhotoSearchStatus(message,type='normal'){
       const el=$('photoSearchStatus');el.textContent=message;el.classList.toggle('error',type==='error');el.classList.toggle('success',type==='success');
@@ -839,20 +875,31 @@
     }
     function renderPhotoSearchResults(analysis){
       photoSearchAnalysis=analysis;
-      const matches=products.map(product=>({product,score:photoProductScore(product,analysis)})).filter(item=>item.score>=35).sort((a,b)=>b.score-a.score);
-      const detected=esc(analysis.detected_name||analysis.product_type||'Barang belum dikenali');
-      const category=esc(analysis.category||'Kategori belum dapat dipastikan');
-      const brand=analysis.brand?` · Merek terlihat: ${esc(analysis.brand)}`:'';
-      const variant=analysis.variant?` · ${esc(analysis.variant)}`:'';
-      const confidence=({high:'Cukup yakin',medium:'Perlu konfirmasi',low:'Kurang yakin'})[analysis.confidence]||'Perlu konfirmasi';
-      let html=`<div class="photo-detected"><div class="eyebrow">Hasil pengenalan AI · ${confidence}</div><h4>${detected}</h4><p>${category}${brand}${variant}${analysis.size?` · ${esc(analysis.size)}`:''}</p>${analysis.visual_notes?`<p style="margin-top:7px">${esc(analysis.visual_notes)}</p>`:''}</div>`;
-      if(matches.length){
-        html+=`<div class="eyebrow">Produk sejenis di toko · ${matches.length} hasil</div><div class="photo-match-list">`+matches.map(({product,score})=>{
-          const matchLabel=score>=90?'Paling sesuai':score>=70?'Jenis barang sama':'Produk serupa';
-          return `<button class="photo-match" type="button" data-detail="${esc(product.id)}"><div class="product-photo">${product.photo_url?`<img src="${esc(product.photo_url)}" alt="Foto ${esc(product.name)}">`:'▧'}</div><div class="product-info"><strong>${esc(product.name)}</strong><small>${esc(product.category)} · ${matchLabel}</small></div><span class="product-price">${money(product.selling_price)}</span></button>`;
-        }).join('')+'</div><p class="photo-search-tip">Urutan teratas adalah yang paling sesuai. Produk dengan jenis serupa tetap ditampilkan meskipun merek atau kemasannya berbeda.</p>';
-      }else{
-        html+='<div class="photo-search-status">Belum ada produk sejenis yang tersimpan di toko.</div>';
+      const scored=products.map(product=>({product,match:photoProductMatch(product,analysis)}))
+        .filter(item=>item.match)
+        .sort((a,b)=>{
+          if(a.match.brandMatched!==b.match.brandMatched)return a.match.brandMatched?-1:1;
+          if(a.match.variantMatched!==b.match.variantMatched)return a.match.variantMatched?-1:1;
+          if(b.match.typeScore!==a.match.typeScore)return b.match.typeScore-a.match.typeScore;
+          if(a.match.candidateIndex!==b.match.candidateIndex)return a.match.candidateIndex-b.match.candidateIndex;
+          return b.match.score-a.match.score||a.product.name.localeCompare(b.product.name,'id');
+        });
+      const matches=scored.slice(0,7);
+      const renderCard=({product},primary=false)=>
+        `<button class="photo-match${primary?' photo-match-primary':''}" type="button" data-detail="${esc(product.id)}" aria-label="Buka detail ${esc(product.name)}">
+          <div class="photo-match-image">${product.photo_url?`<img src="${esc(product.photo_url)}" alt="Foto ${esc(product.name)}" loading="lazy">`:'<span>▧</span>'}</div>
+          <div class="product-info"><strong>${esc(product.name)}</strong><small>${money(product.selling_price)}</small></div>
+          <span class="photo-match-arrow" aria-hidden="true">›</span>
+        </button>`;
+
+      if(!matches.length){
+        $('photoSearchResults').innerHTML='<div class="photo-search-empty">Produk tidak ditemukan di katalog.</div>';
+        return;
+      }
+      let html='<div class="photo-results-heading">Hasil pencocokan</div>';
+      html+='<div class="photo-match-section"><div class="photo-match-section-title">Paling cocok</div>'+renderCard(matches[0],true)+'</div>';
+      if(matches.length>1){
+        html+='<div class="photo-match-section"><div class="photo-match-section-title">Produk sejenis</div><div class="photo-match-list">'+matches.slice(1).map(item=>renderCard(item,false)).join('')+'</div></div>';
       }
       $('photoSearchResults').innerHTML=html;
     }
@@ -892,7 +939,7 @@
         const data=await invokePhotoAI({imageDataUrl});
         if(!data||!data.detected_name)throw new Error('AI belum dapat mengenali barang dari foto ini. Coba foto ulang dengan barang lebih dekat, fokus, dan pencahayaan cukup.');
         renderPhotoSearchResults(data);
-        setPhotoSearchStatus('Foto berhasil dianalisis. Periksa kecocokan produk di bawah. Pilih produk yang benar untuk melihat harganya.','success');
+        setPhotoSearchStatus('Pencarian selesai. Pilih produk untuk membuka detailnya.','success');
       }catch(error){
         console.error('Pencarian foto:',error);
         setPhotoSearchStatus(error.message||'Foto gagal dianalisis. Coba lagi.','error');
